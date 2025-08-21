@@ -110,12 +110,10 @@
                         const appLaunchStartTime = Date.now();
                         window.location = `pastrostaging://${encodeURIComponent(referrer)}`;
                             window.setTimeout(function(){
-                            if (document.visibilityState === 'hidden'){
-                            return;
+                        if (Date.now() - appLaunchStartTime < 2000) {
+                            window.location = appStoreUrl;
                         }
-                         window.location = appStoreUrl;
-                        
-                        },1000);
+                        },1500);
                 };
                 document.body.appendChild(agreeButton);
             } else if (isBrowser()) {
