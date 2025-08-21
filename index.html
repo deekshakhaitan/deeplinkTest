@@ -110,9 +110,9 @@
                             if (document.visibilityState === 'hidden') openedApp = true;
                         };
 						
-						const onBlur = () => {
-                            openedApp = true;
-                        };
+						// const onBlur = () => {
+                        //     openedApp = true;
+                        // };
 
                         const onPageHide = () => {
                             openedApp = true;
@@ -120,14 +120,14 @@
 						
                         document.addEventListener('visibilitychange', onVis, { once: true });
                         window.addEventListener('pagehide', onPageHide, { once: true });
-						window.addEventListener('blur', onBlur, { once: true });
+						// window.addEventListener('blur', onBlur, { once: true });
 						
                         window.location = `synaottlink${iosAppId}://${encodeURIComponent(referrer)}`;                        
                         
                         window.setTimeout(function(){
 							document.removeEventListener('visibilitychange', onVis);
                             window.removeEventListener('pagehide', onPageHide);
-                            window.removeEventListener('blur', onBlur);
+                            // window.removeEventListener('blur', onBlur);
 
                             if (openedApp) { //link is already opened in the app. No need to redirect to App Store
                                 return;
