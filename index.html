@@ -132,10 +132,23 @@
 
     // Detect if the app actually opened (tab goes to background)
     let openedApp = false;
+    let fallbackExecuted = false;
+    
     const onVis = () => {
-      if (document.visibilityState === 'hidden') openedApp = true;
+        if (document.visibilityState === 'hidden') {
+            openedApp = true;
+            console.log('App opened - visibility changed to hidden');
+        }
     };
+    
+    const onBlur = () => {
+        openedApp = true;
+        console.log('App opened - window lost focus');
+    };
+    
+    // Listen for both visibility change and blur events
     document.addEventListener('visibilitychange', onVis, { once: true });
+    window.addEventListener('blur', onBlur, { once: true });
 
     // 1) Try UNIVERSAL LINK first (HTTPS) inside the same user gesture
    try {
@@ -144,19 +157,36 @@
   console.error('Universal Link navigation failed:', e);
 }
 
-    const FALLBACK_MS = 800; // try 600–1200; 800ms feels snappy without false fallbacks
-    setTimeout(() => {
-      document.removeEventListener('visibilitychange', onVis);
+    const FALLBACK_MS = 2000; // try 600–1200; 800ms feels snappy without false fallbacks
+    const fallbackTimer = setTimeout(() => {
+        if (fallbackExecuted) return;
+        fallbackExecuted = true;
+        
+        document.removeEventListener('visibilitychange', onVis);
+        window.removeEventListener('blur', onBlur)
       if (openedApp) {
         // App opened; do NOT open the App Store
         // Optional: reset UI for when user returns
         // agreeButton.disabled = false; agreeButton.textContent = 'OPEN';
         return;
       }
+       console.log('App did not open, falling back to App Store');
       openAppStore();
     }, FALLBACK_MS);
-  };
-
+    
+  // Also clear the timeout if app opens
+    const clearFallback = () => {
+        if (openedApp && !fallbackExecuted) {
+            clearTimeout(fallbackTimer);
+            fallbackExecuted = true;
+            console.log('App opened, cancelled App Store fallback');
+        }
+    };
+    
+    // Check again after a short delay to catch quick app opens
+    setTimeout(clearFallback, 100);
+    setTimeout(clearFallback, 500);
+};
   document.body.appendChild(agreeButton);
 
             } else if (isBrowser()) {
