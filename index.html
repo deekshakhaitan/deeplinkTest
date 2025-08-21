@@ -107,13 +107,28 @@
                             console.error('Failed to write to clipboard:', err);
                         });
 
+                         let openedApp = false;
+    const onVis = () => {
+      if (document.visibilityState === 'hidden') openedApp = true;
+    };
+    document.addEventListener('visibilitychange', onVis, { once: true });
+
                         const appLaunchStartTime = Date.now();
                         window.location = `pastrostaging://${encodeURIComponent(referrer)}`;
-                            window.setTimeout(function(){
-                        if (Date.now() - appLaunchStartTime < 2000) {
+
+                        const FALLBACK_MS = 800; // try 600–1200; 800ms feels snappy without false fallbacks
+    setTimeout(() => {
+      document.removeEventListener('visibilitychange', onVis);
+      if (openedApp) {
+        // App opened; do NOT open the App Store
+        // Optional: reset UI for when user returns
+        // agreeButton.disabled = false; agreeButton.textContent = 'OPEN';
+        return;
+      }
+                        
                             window.location = appStoreUrl;
-                        }
-                        },1500);
+                             }, FALLBACK_MS);
+                       
                 };
                 document.body.appendChild(agreeButton);
             } else if (isBrowser()) {
