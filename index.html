@@ -132,7 +132,7 @@
 
     // Detect if the app actually opened (tab goes to background)
     let openedApp = false;
-    let fallbackExecuted = false;
+    // let fallbackExecuted = false;
     
     const onVis = () => {
         if (document.visibilityState === 'hidden') {
@@ -159,8 +159,8 @@
 
     const FALLBACK_MS = 2000; // try 600–1200; 800ms feels snappy without false fallbacks
     const fallbackTimer = setTimeout(() => {
-        if (fallbackExecuted) return;
-        fallbackExecuted = true;
+        // if (fallbackExecuted) return;
+        // fallbackExecuted = true;
         
         document.removeEventListener('visibilitychange', onVis);
         window.removeEventListener('blur', onBlur)
@@ -174,18 +174,18 @@
       openAppStore();
     }, FALLBACK_MS);
     
-  // Also clear the timeout if app opens
-    const clearFallback = () => {
-        if (openedApp && !fallbackExecuted) {
-            clearTimeout(fallbackTimer);
-            fallbackExecuted = true;
-            console.log('App opened, cancelled App Store fallback');
-        }
-    };
+  // // Also clear the timeout if app opens
+  //   const clearFallback = () => {
+  //       if (openedApp && !fallbackExecuted) {
+  //           clearTimeout(fallbackTimer);
+  //           fallbackExecuted = true;
+  //           console.log('App opened, cancelled App Store fallback');
+  //       }
+  //   };
     
-    // Check again after a short delay to catch quick app opens
-    setTimeout(clearFallback, 100);
-    setTimeout(clearFallback, 500);
+  //   // Check again after a short delay to catch quick app opens
+  //   setTimeout(clearFallback, 100);
+  //   setTimeout(clearFallback, 500);
 };
   document.body.appendChild(agreeButton);
 
