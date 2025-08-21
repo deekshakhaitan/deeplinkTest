@@ -107,28 +107,22 @@
                             console.error('Failed to write to clipboard:', err);
                         });
 
-                         let openedApp = false;
-    const onVis = () => {
-      if (document.visibilityState === 'hidden') openedApp = true;
-    };
-    document.addEventListener('visibilitychange', onVis, { once: true });
-
-                        const appLaunchStartTime = Date.now();
+                        let openedApp = false;
+                        const onVis = () => {
+                        if (document.visibilityState === 'hidden') openedApp = true;
+                        };
+                        document.addEventListener('visibilitychange', onVis, { once: true });
+//                        window.location = `synaottlink${iosAppId}://${encodeURIComponent(referrer)}`;
                         window.location = `pastrostaging://${encodeURIComponent(referrer)}`;
+                        window.setTimeout(function(){
+                            document.removeEventListener('visibilitychange', onVis);
 
-                        const FALLBACK_MS = 800; // try 600–1200; 800ms feels snappy without false fallbacks
-    setTimeout(() => {
-      document.removeEventListener('visibilitychange', onVis);
-      if (openedApp) {
-        // App opened; do NOT open the App Store
-        // Optional: reset UI for when user returns
-        // agreeButton.disabled = false; agreeButton.textContent = 'OPEN';
-        return;
-      }
-                        
+                            if (openedApp) {
+                                return;
+                            }
+
                             window.location = appStoreUrl;
-                             }, FALLBACK_MS);
-                       
+                        },1500);
                 };
                 document.body.appendChild(agreeButton);
             } else if (isBrowser()) {
