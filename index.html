@@ -110,9 +110,11 @@
                         const appLaunchStartTime = Date.now();
                         window.location = `pastrostaging://${encodeURIComponent(referrer)}`;
                             window.setTimeout(function(){
-                        if (Date.now() - appLaunchStartTime < 1500) {
-                            window.location = appStoreUrl;
+                            if (document.visibilityState === 'hidden'){
+                            return;
                         }
+                         window.location = appStoreUrl;
+                        
                         },1000);
                 };
                 document.body.appendChild(agreeButton);
