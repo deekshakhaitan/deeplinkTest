@@ -96,21 +96,21 @@
                 // ssr - Same as text. The button styling, title need to be redone to match Astro requirement. Ask Bindiya for the UI definition.
                 agreeButton.textContent = 'OPEN';
 
-                function openViaAnchor(url) {
-    const a = document.createElement('a');
-    a.href = url;
-    a.target = '_top';
-    a.rel = 'noopener';
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    // Some IABs only honor top-frame nav:
-    try { window.top.location.href = url; } catch (_) {}
-  }
+  //               function openViaAnchor(url) {
+  //   const a = document.createElement('a');
+  //   a.href = url;
+  //   a.target = '_top';
+  //   a.rel = 'noopener';
+  //   a.style.display = 'none';
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   // Some IABs only honor top-frame nav:
+  //   try { window.top.location.href = url; } catch (_) {}
+  // }
 
-  function openAppStore() {
-    openViaAnchor(appStoreUrl);
-  }
+  // function openAppStore() {
+  //   openViaAnchor(appStoreUrl);
+  // }
                 agreeButton.onclick = function() {
                     // Redirect to the App Store and write to clipboard
                     navigator.clipboard.writeText(`referrer=${encodeURIComponent(referrer)}`)
@@ -138,12 +138,12 @@
                         window.addEventListener('pagehide', onPageHide, { once: true });
 						// window.addEventListener('blur', onBlur, { once: true });
 						
-                        // window.location = `synaottlink${iosAppId}://${encodeURIComponent(referrer)}`;                        
-                          try {
-  openViaAnchor(referrer);
-} catch (e) {
-  console.error('Universal Link navigation failed:', e);
-}
+                        window.location = `synaottlink${iosAppId}://${encodeURIComponent(referrer)}`;                        
+//                           try {
+//   openViaAnchor(referrer);
+// } catch (e) {
+//   console.error('Universal Link navigation failed:', e);
+// }
                         window.setTimeout(function(){
 							document.removeEventListener('visibilitychange', onVis);
                             window.removeEventListener('pagehide', onPageHide);
